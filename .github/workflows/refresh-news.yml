@@ -1,0 +1,36 @@
+name: Refresh news feed
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Fetch current headlines
+        run: |
+          mkdir -p data
+          node - <<'NODE'
+          const clean = value => (value || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').replace(/&amp;/g, '&').replace(/&quot;/g, '"').trim();
+          const tag = (item, name) => clean((item.match(new RegExp('<' + name + '[^>]*>([\\s\\S]*?)</' + name + '>', 'i')) || [])[1]);
+          const images = ['image-lab', 'image-crowd', 'image-money', 'image-book', 'image-space', 'image-ocean'];
+          const topics = ['World', 'Business', 'Technology', 'Culture', 'Science'];
+          const xml = await fetch('https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en').then(r => r.text());
+          const headlines = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)].slice(0, 7).map((match, index) => { const item = match[1]; const title = tag(item, 'title').replace(/\s+-\s+[^-]+$/, ''); return { id: index + 1, topic: topics[index % topics.length], title, author: tag(item, 'source') || 'Google News', time: 'Updated now', read: (4 + index % 5) + ' min read', image: images[index % images.length], summary: 'Latest reporting from Google News.' }; });
+          if (headlines.length < 2) throw new Error('No headlines returned');
+          const [lead, ...stories] = headlines;
+          await require('node:fs/promises').writeFile('data/news.json', JSON.stringify({ updatedAt: new Date().toISOString(), lead, stories }, null, 2) + '\n');
+          NODE
+      - name: Commit changed headlines
+        run: |
+          git config user.name "current-news[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/news.json
+          git diff --cached --quiet || git commit -m "chore: refresh news feed"
+          git push
