@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Current — News that matters</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grain"></div>
+  <header class="site-header">
+    <a class="logo" href="#top" aria-label="Current home">current<span>.</span></a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="#latest">Latest</a><a href="#briefing">Briefing</a><a href="#saved">Saved <span id="saved-count"></span></a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-button" id="theme-toggle" aria-label="Switch color theme">◐</button>
+      <button class="menu-button" id="menu-button" aria-expanded="false" aria-controls="mobile-nav">Menu <span>+</span></button>
+    </div>
+  </header>
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
+    <a href="#latest">Latest</a><a href="#briefing">Briefing</a><a href="#saved">Saved articles</a>
+  </nav>
+
+  <main id="top">
+    <section class="masthead">
+      <p class="eyebrow"><span class="live-dot"></span> Monday, August 31 · Your daily signal</p>
+      <h1>Make sense of<br><em>what's moving.</em></h1>
+      <p class="intro">A calm, considered read on the stories shaping your world. Updated throughout the day.</p>
+    </section>
+
+    <section class="topic-bar" aria-label="Filter stories by topic">
+      <div class="topics" id="topics">
+        <button class="topic active" data-topic="All">All stories</button>
+        <button class="topic" data-topic="World">World</button>
+        <button class="topic" data-topic="Business">Business</button>
+        <button class="topic" data-topic="Technology">Technology</button>
+        <button class="topic" data-topic="Culture">Culture</button>
+        <button class="topic" data-topic="Science">Science</button>
+      </div>
+      <label class="search"><span>⌕</span><input id="search" type="search" placeholder="Search stories" aria-label="Search stories" /></label>
+    </section>
+
+    <section class="lead-grid" id="latest" aria-label="Top story">
+      <article class="lead-story story-card" data-id="1">
+        <div class="story-image image-city"><span class="image-credit">Marta Díaz / Current</span></div>
+        <div class="story-copy">
+          <div class="story-meta"><span class="category">World</span><span>8 min read</span></div>
+          <h2>The quiet remaking of cities after the heat</h2>
+          <p>Across the globe, architects and residents are rebuilding urban life around a hotter reality — one shaded street at a time.</p>
+          <div class="story-footer"><span>By Nia Carter · 24 min ago</span><button class="save-button" aria-label="Save The quiet remaking of cities after the heat">Save <span>↗</span></button></div>
+        </div>
+      </article>
+      <aside class="now-panel" id="briefing">
+        <p class="panel-label">The now</p>
+        <div class="now-time">09<span>:</span>42</div>
+        <p class="now-copy">Your 5-minute briefing for the start of the week.</p>
+        <button class="briefing-button" id="briefing-button">Open briefing <span>→</span></button>
+        <div class="market-row"><span>Markets</span><strong>+0.84%</strong></div>
+      </aside>
+    </section>
+
+    <section class="feed-section">
+      <div class="section-heading"><h2>Worth your attention</h2><span id="result-count">6 stories</span></div>
+      <div class="story-feed" id="story-feed"></div>
+      <div class="empty-state" id="empty-state" hidden>No stories match that search. Try another topic.</div>
+    </section>
+
+    <section class="saved-section" id="saved">
+      <div class="section-heading"><h2>Saved for later</h2><span id="saved-empty">Nothing saved yet</span></div>
+      <div class="saved-list" id="saved-list"></div>
+    </section>
+
+    <section class="newsletter">
+      <p class="eyebrow">The daily edit</p>
+      <h2>One clear thought<br>for your inbox.</h2>
+      <form id="newsletter-form"><input type="email" aria-label="Email address" placeholder="you@email.com" required><button>Subscribe →</button></form>
+      <p class="form-note" id="form-note">No noise. Just the important things, daily.</p>
+    </section>
+  </main>
+  <footer><a class="logo" href="#top">current<span>.</span></a><span>Independent journalism for curious people.</span><span>© 2026 Current</span></footer>
+
+  <dialog id="article-modal"><button id="close-modal" class="close" aria-label="Close article">×</button><div id="article-content"></div></dialog>
+  <script src="app.js"></script>
+</body>
+</html>
