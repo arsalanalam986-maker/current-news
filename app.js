@@ -1,4 +1,4 @@
-const stories = [
+let stories = [
  {id:2,topic:'Technology',title:'The small machines making a big difference in medicine',author:'Ari Lopez',time:'48 min ago',read:'6 min read',image:'image-lab',summary:'A new generation of diagnostic tools is bringing high-quality healthcare closer to home.'},
  {id:3,topic:'Culture',title:'Why the art of gathering is having a comeback',author:'June Park',time:'1 hr ago',read:'5 min read',image:'image-crowd',summary:'From neighborhood supper clubs to third places, people are finding their way back to one another.'},
  {id:4,topic:'Business',title:'The new math of a four-day workweek',author:'Samir Patel',time:'2 hrs ago',read:'7 min read',image:'image-money',summary:'For companies testing shorter weeks, productivity is just the beginning of the calculation.'},
@@ -22,4 +22,5 @@ document.querySelector('#menu-button').onclick=()=>{const nav=document.querySele
 document.querySelector('#theme-toggle').onclick=()=>document.body.classList.toggle('dark');
 document.querySelector('#briefing-button').onclick=()=>openArticle(lead.id);
 document.querySelector('#newsletter-form').onsubmit=e=>{e.preventDefault();document.querySelector('#form-note').textContent='You’re on the list. See you tomorrow morning.';e.target.reset()};
-render();
+async function loadLatestNews(){try{const response=await fetch('data/news.json',{cache:'no-store'});if(!response.ok)throw new Error('News feed unavailable');const data=await response.json();if(!data.lead||!Array.isArray(data.stories)||!data.stories.length)throw new Error('Invalid news feed');Object.assign(lead,data.lead);stories=data.stories;const leadCard=document.querySelector('.lead-story');leadCard.querySelector('.story-meta').innerHTML=`<span class="category">${lead.topic}</span><span>${lead.read}</span>`;leadCard.querySelector('h2').textContent=lead.title;leadCard.querySelector('.story-copy > p').textContent=lead.summary;leadCard.querySelector('.story-footer > span').textContent=`By ${lead.author} · ${lead.time}`;document.querySelector('.eyebrow').innerHTML='<span class="live-dot"></span> Live headlines · refreshed every 30 minutes';render()}catch(error){console.info('Using the built-in news sample until the live feed is ready.');render()}}
+loadLatestNews();
